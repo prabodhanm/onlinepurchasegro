@@ -1,0 +1,52 @@
+<!--
+  Generated template for the LoginPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+    <ion-navbar color="green">
+      <button ion-button menuToggle>
+        <ion-icon name="menu"></ion-icon>
+      </button>
+      <ion-title>
+        Login
+      </ion-title>
+
+    </ion-navbar>
+  </ion-header>
+
+<ion-content>
+    <ion-item no-lines>
+        <ion-img src="./assets/img/mapexslogo_360x.jpg"></ion-img>
+    </ion-item>
+    <ion-item>
+        <ion-label class="headerlabel">Login</ion-label>
+      </ion-item>
+    <ion-item *ngIf="errormsg">
+      <ion-label class="errormsg">{{this.errormsg}}</ion-label>
+    </ion-item>
+    <!-- <ion-item *ngIf="!emailfound">
+      <ion-label class="errormsg">Customer Not Found</ion-label>
+    </ion-item> -->
+    <ion-item>
+      <ion-label position="floating">Email</ion-label>
+      <ion-input required type="text" [(ngModel)]="this.email"></ion-input>
+    </ion-item>
+    <!-- <p *ngIf="isLogin">error message: Already Login.</p> -->
+      <ion-item>
+        <ion-label position="floating">Password</ion-label>
+        <ion-input type="password" [(ngModel)]="this.password"></ion-input>
+      </ion-item>
+    <ion-item>
+      <button ion-button  (click)="login()" expand="block">Sign In</button>
+    </ion-item>
+    <ion-item>
+        <a button (click)="register()" class="imgclass">New User? click here to Sign Up</a>
+    </ion-item>
+
+    <!-- <ion-item>
+      <ion-label>Total Customers found : {{this.totalcustomers}}</ion-label>
+    </ion-item> -->
+
+</ion-content>

@@ -1,0 +1,33 @@
+  <ion-header>
+      <ion-navbar color="green">
+        <button ion-button menuToggle>
+          <ion-icon name="menu"></ion-icon>
+        </button>
+
+        <ion-label class="userlabel" right>Login as:</ion-label>
+        <ion-label class="userlabel" right>{{this.loginuser}}</ion-label>
+
+        <ion-buttons *ngIf="loginuser" end>
+          <button ion-button icon-only (click)="logout()">
+              <ion-icon name="log-out"></ion-icon>
+          </button>
+        </ion-buttons>
+      </ion-navbar>
+
+
+  </ion-header>
+<ion-content padding>
+    <div>
+      <ion-thumbnail>
+          <img src={{prod.images[0].src}}>
+      </ion-thumbnail>
+
+        <div>
+            <ion-label class="my-label ion-padding-left" text-wrap>{{prod.description}}</ion-label>
+            <ion-label class="label-price">Price: {{prod.variants[0].price}}</ion-label>
+        </div>
+      </div>
+    <div class="ion-margin">
+      <button ion-button (click)="addtocart()" round small>Add to Cart</button>
+    </div>
+</ion-content>

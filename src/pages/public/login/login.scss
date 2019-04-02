@@ -1,0 +1,31 @@
+page-login {
+  ion-img {
+    width: 80%;
+    height: 75px;
+  }
+
+  ion-label {
+    font-size: small;
+  }
+
+  ion-input {
+    font-size: small;
+  }
+
+  .imgclass {
+    cursor: pointer;
+  }
+
+  .errormsg {
+    font-size: medium;
+    text-align: center;
+    color: red;
+  }
+  .headerlabel {
+    font-size: large;
+    font-style: initial;
+    text-align: center;
+  }
+}
+
+

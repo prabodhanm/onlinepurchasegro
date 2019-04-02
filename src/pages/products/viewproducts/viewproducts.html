@@ -1,0 +1,97 @@
+<!--
+  Generated template for the ViewproductsPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+    <ion-navbar color="green">
+      <!-- <ion-list color="danger" no-lines> -->
+          <button ion-button menuToggle>
+              <ion-icon name="menu"></ion-icon>
+            </button>
+
+          <ion-buttons end>
+            <ion-badge *ngIf="this.cart.length > 0">{{ this.cart.length }}</ion-badge>
+              <button ion-button icon-only (click)="viewcart()" size="small">
+                  <ion-icon name="cart"></ion-icon>
+              </button>
+          </ion-buttons>
+
+            <ion-label class="userlabel" right>Login as:{{this.loginuser}}</ion-label>
+            <!-- <ion-label class="user-label" right></ion-label> -->
+            <ion-buttons *ngIf="loginuser" end>
+              <button ion-button icon-only (click)="logout()">
+              <ion-icon name="log-out"></ion-icon>
+            </button>
+          </ion-buttons>
+
+          <ion-buttons end>
+              <button ion-button icon-only (click)="showorders()">
+                <img src="../../../assets/icon/productorder.png" class="image">
+              </button>
+          </ion-buttons>
+      <!-- </ion-list> -->
+
+
+
+
+
+
+
+
+
+    </ion-navbar>
+    <!-- <ion-toolbar color="danger">
+        <ion-item color="danger" lines="none">
+            <ion-label class="user-label" slot="end">Login as:</ion-label> <br />
+            <ion-label class="user-label" slot="end">{{this.loginuser}}</ion-label>
+          </ion-item>
+
+          <ion-buttons *ngIf="loginuser" end>
+            <button ion-button icon-only (click)="logout()">
+                <ion-icon name="log-out"></ion-icon>
+            </button>
+          </ion-buttons>
+    </ion-toolbar> -->
+  </ion-header>
+
+<ion-content>
+
+    <ion-item no-lines>
+        <ion-img src="./assets/img/mapexslogo_360x.jpg"></ion-img>
+    </ion-item>
+    <ion-item no-lines></ion-item>
+    <ion-grid>
+        <ion-row>
+            <ion-col size="6" *ngFor= "let d of this.products">
+                <!-- <ion-card> -->
+                <div class="login-logo">
+                    <ion-thumbnail>
+                        <img (click)= "showdetailitems(d)" src={{d.images[0].src}} class="imgclass">
+                    </ion-thumbnail>
+
+                    <!-- <div class="myOverlay"> -->
+                        <div>
+                            <div class="my-label">{{d.title}}</div>
+                            <ion-label>{{d.variants[0].price | currency:'Rs.':'symbol'}}</ion-label>
+                        </div>
+                        <!-- <div class="my-label">
+                            <ion-label>{{d.variants[0].price | currency:'Rs.':'symbol'}}</ion-label>
+                        </div> -->
+
+                    <!-- </div> -->
+
+                      </div>
+
+                <div>
+                    <button ion-button (click)="addtocart(d)" round  small>Add to Cart</button>
+                </div>
+
+                <!-- </ion-card> -->
+
+
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-content>

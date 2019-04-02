@@ -1,1 +1,76 @@
-<ion-nav [root]="rootPage"></ion-nav>
+<ion-menu type="overlay" [content]="content">
+  <ion-header>
+    <ion-toolbar color="green">
+      <ion-title>Menu</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <!-- <ion-content>
+    <ion-list>
+      <button menuClose ion-item *ngFor="let p of pages ;  let i=index" (click)="openPage(p,i);">
+        <ion-icon name="{{p.url}}"></ion-icon>
+        {{p.title}}
+      </button>
+    </ion-list>
+  </ion-content> -->
+
+   <!-- <ion-content>
+    <ion-list>
+      <ion-item ion-item *ngFor="let p of pages;  let i=index" (click)="openPage(p,i);">
+        <ion-row>
+          <ion-col col-9>
+              <span>
+                {{p.title}}
+                <ion-icon [name]="selectedMenu == i? 'arrow-down' : 'arrow-forward'"
+                *ngIf="p.subpages" float-right class="icons" style="border:0vw;"></ion-icon>
+              </span>
+              <ion-list no-lines [hidden]="selectedMenu != i">
+                <ion-item no-border *ngFor="let subpage of p.subpages;let i2=index"
+                (click)="openPage(subpage,i2)" class="item">
+                  <ion-row>
+                    <ion-col>
+                      <span>&nbsp;{{subpage.title}}</span>
+                    </ion-col>
+                  </ion-row>
+                </ion-item>
+              </ion-list>
+          </ion-col>
+        </ion-row>
+      </ion-item>
+    </ion-list>
+  </ion-content>  -->
+  <!-- (ionInput)="getItems($event)" -->
+  <ion-content>
+    <ion-searchbar (ionBlur)="getItems($event)">
+
+    </ion-searchbar>
+
+      <ion-list color="primary">
+        <ion-item ion-item *ngFor="let p of pages; let i=index"
+        text-wrap (click)="toggleLevel1(p,'idx'+i, i)" class="mnuclass">
+          <h4>
+            <ion-icon name={{p.url}}></ion-icon>
+            {{p.title}}
+            <!-- <ion-icon color ="success" item-right [name]='arrow-dropdown-circle'></ion-icon> -->
+            <!-- <ion-icon  color="success" *ngIf="p.subpages" item-right [name]="isLevel1Shown('idx'+i) ? 'arrow-dropdown-circle' : 'arrow-dropright-circle'"></ion-icon> -->
+          </h4>
+          <ion-list *ngIf="isLevel1Shown('idx'+i)">
+            <ion-item *ngFor="let s of p.subpages; let i2=index" text-wrap (click)="toggleLevel2(s, 'idx'+i+'idx'+i2,i, s.title)" [ngClass]="{active: isLevel2Shown('idx'+i+'idx'+i2)}">
+              <h4>
+                <ion-icon name={{s.url}}></ion-icon>
+                {{s.title}}
+                <ion-icon  color="success" *ngIf="s.subpages" item-right [name]="isLevel2Shown('idx'+i+'idx'+i2) ? 'arrow-dropdown-circle' : 'arrow-dropright-circle'"></ion-icon>
+              </h4>
+              <!-- <ion-list *ngIf="isLevel2Shown('idx'+i+'idx'+i2)">
+                <ion-item *ngFor="let m of s.manufactures" text-wrap>
+                  {{m.manufacture}}
+                </ion-item>
+              </ion-list> -->
+            </ion-item>
+          </ion-list>
+        </ion-item>
+      </ion-list>
+    </ion-content>
+</ion-menu>
+
+<ion-nav #content [root]="rootPage"></ion-nav>

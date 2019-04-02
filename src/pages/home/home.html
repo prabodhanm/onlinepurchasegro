@@ -1,14 +1,56 @@
 <ion-header>
-  <ion-navbar>
-    <ion-title>
-      Ionic Blank
-    </ion-title>
+  <ion-navbar color="green">
+    <!-- <ion-buttons>
+      <ion-img src='src\assets\imgs\mapexslogo_360x.jpg'></ion-img>
+    </ion-buttons> -->
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <!-- <ion-title>
+      Home
+    </ion-title> -->
+
+
+    <ion-buttons *ngIf="loginuser" end>
+      <button ion-button icon-only (click)="logout()">
+          <ion-icon name="log-out"></ion-icon>
+      </button>
+
+      <ion-badge *ngIf="this.cart.length > 0">{{ this.cart.length }}</ion-badge>
+              <button ion-button icon-only (click)="viewcart()" size="small">
+                  <ion-icon name="cart"></ion-icon>
+              </button>
+    </ion-buttons>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="showorders()">
+        <img src="../../assets/icon/productorder.png" class="image">
+      </button>
+    </ion-buttons>
+    <ion-label class="userlabel">Login as: <br>{{this.loginuser}}</ion-label>
+    <!-- <ion-label class="userlabel">{{this.loginuser}}</ion-label> -->
   </ion-navbar>
 </ion-header>
+<!-- src\assets\imgs\mapexslogo_360x.jpg -->
+<ion-content>
+    <ion-item no-lines>
+        <ion-img src="./assets/img/mapexslogo_360x.jpg"></ion-img>
+    </ion-item>
+    <ion-item no-lines>
+        <!-- <ion-img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyaoS9_r_P2KN1OhJRZGF883fdYw8DfCcTumhLNbK3vdF4ZZJT7w"></ion-img> -->
+    </ion-item>
+      <ion-item no-lines ion-padding-top>
+          <ion-slides *ngIf="this.imgcollection && this.imgcollection.length"
+          autoplay="5000" loop="true" speed="500" pager="true">
+            <ion-slide *ngFor= "let d of this.imgcollection">
+              <img src='../../assets/img/slider/{{d}}' tappable>
+                  <!-- <ion-img src={{d.images[0].src}} tappable> -->
+            </ion-slide>
+          </ion-slides>
+      </ion-item>
 
-<ion-content padding>
-  The world is your oyster.
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-  </p>
+      <!-- <ion-item>
+        <ion-label>Total menu items {{totalmenuitems}}</ion-label>
+      </ion-item> -->
 </ion-content>
+
+<!-- [effect]="'converflow'" -->
