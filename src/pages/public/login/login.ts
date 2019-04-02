@@ -81,8 +81,6 @@ export class LoginPage {
        cordova.plugin.http.get(url,
             params, headers, (response) => {
             this.storage.set('customerdata',JSON.parse(response.data).customers) ;
-            this.customers = JSON.parse(response.data).customers;
-            console.log('Customers data in login constructor ', JSON.parse(response.data).customers);
         }, function(response) {
           console.error(response.error);
         });
@@ -103,13 +101,13 @@ export class LoginPage {
 
     for(let customer of this.customers){
 
-      if(customer.email == this.email ){
+      if(customer.email.toLowerCase() == this.email.toLowerCase() ){
         this.emailfound = true;
 
         this.customerid = customer.id;
         this.storage.set('customerid',this.customerid);
 
-        if(customer.note != this.password){
+        if(customer.note.toLowerCase() != this.password.toLowerCase()){
           this.emailfound = false;
           this.storage.set('customerupdate', true);
           this.storage.set('error','Invalid login credentials');
