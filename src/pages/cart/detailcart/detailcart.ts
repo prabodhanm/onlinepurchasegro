@@ -94,7 +94,7 @@ export class DetailcartPage {
     // console.log('Adding line item for ' + this.prod.id);
     console.log('Checkout id ', this.checkoutid);
     console.log('Product id in addlineitems ', this.prod.id);
-    if(this.checkoutid == undefined){
+    if(this.checkoutid == undefined || this.checkoutid == " "){
       this.client.checkout.create().then((checkout) => {
         this.prodcheckout = checkout;
         this.cartservice.setwebUrl(checkout.webUrl);

@@ -355,7 +355,7 @@ export class ViewcartPage {
     }
     this.storage.get('email')
         .then((val) => {
-          // console.log('Email is = ', val );
+          console.log('Email is = ', val );
           this.login = val;
           // console.log('Login details ', this.login)
           // console.log('call customer details...');
@@ -377,10 +377,12 @@ export class ViewcartPage {
               this.storage.get('weburl')
               .then((val) => {
                 this.weburl = val;
-                // console.log('printing weburl...');
+                console.log('printing weburl...', val);
                 // console.log(this.weburl);
                 // const browser = this.iab.create(this.weburl, '_system', options);
                 this.iab.create(this.weburl, '_blank', options);
+              }).catch(error => {
+                console.log(error);
               });
             });
           }
