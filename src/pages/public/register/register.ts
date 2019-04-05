@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
-import { ManagecustomersProvider } from '../../../providers/managecustomers/managecustomers';
+// import { ManagecustomersProvider } from '../../../providers/managecustomers/managecustomers';
 import { HomePage } from '../../home/home';
 import { Storage } from '@ionic/storage';
 
@@ -12,6 +12,8 @@ import { Storage } from '@ionic/storage';
  */
 
 // @IonicPage()
+
+let _this;
 @Component({
   selector: 'page-register',
   templateUrl: 'register.html',
@@ -24,35 +26,30 @@ export class RegisterPage {
   loginuser : string;
   customerdetails : any;
 
-  customerdata : any = {
-    "first_name": "",
-    "last_name" : "",
-    "email" : "",
-    "phone" : "",
-    "verified_email" : true,
-    "addresses": [],
-    "password" : "",
-    "password_confirmation":"",
-    "send_email_welcome" : false,
-    "note" : ""
-  } ;
+  customerdata : any ;
+
+  updateuser : boolean = false;
 
   custdata : any = {
     "id" : "",
     "note" : ""
   };
 
+  userexistswithpwd : boolean = false;
+
   updatecustomerdata : any = {"customer" : this.custdata};
 
   allcustomersdata : any = {"customer":this.customerdata };
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
-    private managecustomer : ManagecustomersProvider, private storage : Storage) {
-      this.storage.get('customerdata').then((customer : any)=> {
+    private storage : Storage) {
+      /*this.storage.get('customerdata').then((customer : any)=> {
         this.customerdetails = customer;
 
         console.log('Customer data in register constructor ', this.customerdetails);
-      });
+      });*/
+      this.getlocalcustomers();
+
   }
 
 
@@ -69,62 +66,129 @@ export class RegisterPage {
   // }
 
   register() {
-    this.customerdata.first_name = this.firstname;
-    this.customerdata.last_name = this.lastname;
-    this.customerdata.email = this.email;
-    this.customerdata.password = this.password;
-    this.customerdata.password_confirmation = this.password;
-    this.customerdata.note = this.password;
+    // _this = this;
+    this.customerdata = {
+      'first_name': this.firstname,
+      'last_name' : this.lastname,
+      'email' : this.email,
+      'phone' : null,
+      'verified_email' : true,
+      'addresses': [],
+      'password' : this.password,
+      'password_confirmation' :this.password,
+      'send_email_welcome' : false,
+      'note' : this.password
+    } ;
 
-
+    this.allcustomersdata.customer = this.customerdata;
     //Check email exists
 
+    let emailfound : boolean = false;
+    let notefound : boolean = true;
     for(let cust of this.customerdetails){
-      if(cust.email == this.email){
-        this.custdata.id= cust.id;
-        this.custdata.note = this.password;
-        // this.custdata.password_confirmation = this.password;
+      if(cust.email.toLowerCase() == this.email.toLowerCase()){
+        emailfound = true;
+        console.log('Email found ', emailfound);
+        if(cust.note == null){
+          notefound = false;
+          console.log('Note Found ', notefound);
+          this.custdata.id= cust.id;
+          this.custdata.note = this.password;
+
+          this.updatecustomerdata.customer = this.custdata;
+
+          console.log('Customer data to update ', this.updatecustomerdata);
+          break;
+        }
+
       }
     }
 
+    if(emailfound && notefound) {
+      this.userexistswithpwd = true;
+      return;
+    }
 
-    this.storage.get('customerupdate').then((val : boolean) => {
-      console.log('value of val in register ', val);
+    if(emailfound && !notefound){
+      this.updateuser = true;
+    }
 
-      if(val) {
-        this.managecustomer.updatecustomer(this.updatecustomerdata).subscribe((customer) => {
-          this.navCtrl.push(HomePage);
-        }, (error) => {
-          console.log(error);
-        });
-      }
-      else {
-        this.registercustomer(this.allcustomersdata);
-      }
-    })
+
+
+    if(this.updateuser) {
+      this.updatecustomer(this.updatecustomerdata);
+    }
+    else {
+      this.registercustomer(this.allcustomersdata);
+    }
+
+    this.userexistswithpwd = false;
   }
 
-
-  registercustomer(customerdata) {
+  async getlocalcustomers(){
     const url = 'https://a761ca71e70728705c351a7a54622a8d:512cd73d33fea018252f63000bdf8e5f@grocerium-exelic-poc.myshopify.com/admin/customers.json';
+      const params = {};
+      let authheader = "Basic YTc2MWNhNzFlNzA3Mjg3MDVjMzUxYTdhNTQ2MjJhOGQ6NTEyY2Q3M2QzM2ZlYTAxODI1MmY2MzAwMGJkZjhlNWY=";
+      const headers = {
+        'Content-Type': 'application/json',
+        'Authorization' : authheader
+      };
+
+      console.log('url = ', url);
+
+      //Using cordova plugins start
+       cordova.plugin.http.get(url,
+            params, headers, (response) => {
+            this.storage.set('customerdata',JSON.parse(response.data).customers) ;
+            this.customerdetails = JSON.parse(response.data).customers;
+
+            console.log('Customer details in getlocalcustomers ', this.customerdetails);
+        }, function(response) {
+          console.error(response.error);
+        });
+        this.storage.set('customerupdate', false);
+  }
+
+  updatecustomer(customerdata) {
+    _this = this;
+    const url = 'https://a761ca71e70728705c351a7a54622a8d:512cd73d33fea018252f63000bdf8e5f@grocerium-exelic-poc.myshopify.com/admin/customers/' + this.custdata.id + '.json';
     // const params = {};
     let authheader = "Basic YTc2MWNhNzFlNzA3Mjg3MDVjMzUxYTdhNTQ2MjJhOGQ6NTEyY2Q3M2QzM2ZlYTAxODI1MmY2MzAwMGJkZjhlNWY=";
-    console.log('Customer data in register customer method ', customerdata);
+    // console.log('Customer data in register customer method ', customerdata);
     const headers = {
-      'Content-Type': 'application/json',
       'Authorization' : authheader
     };
 
-    cordova.plugin.http.post(url,customerdata,headers, function(response) {
-      console.log('Response from customer post ' ,response);
+    cordova.plugin.http.setDataSerializer( "json" );
+    cordova.plugin.http.put(url, customerdata, headers, function(response) {
       try {
-        response.data = JSON.parse(response.data);
-        // prints test
-        console.log(response.data.message);
-        this.navCtrl.push(HomePage);
+        _this.navCtrl.push(HomePage);
         }
         catch(e) {
-            console.error("JSON parsing error");
+            console.log(e);
+        }
+    }, function(response) {
+      console.log(response);
+    });
+  }
+
+  registercustomer(customerdata) {
+    _this = this;
+    const url = 'https://a761ca71e70728705c351a7a54622a8d:512cd73d33fea018252f63000bdf8e5f@grocerium-exelic-poc.myshopify.com/admin/customers.json';
+    // const params = {};
+    let authheader = "Basic YTc2MWNhNzFlNzA3Mjg3MDVjMzUxYTdhNTQ2MjJhOGQ6NTEyY2Q3M2QzM2ZlYTAxODI1MmY2MzAwMGJkZjhlNWY=";
+    // console.log('Customer data in register customer method ', customerdata);
+    const headers = {
+      'Authorization' : authheader
+    };
+
+    cordova.plugin.http.setDataSerializer( "json" );
+    cordova.plugin.http.post(url, customerdata, headers, function(response) {
+      try {
+        _this.navCtrl.push(HomePage);
+        }
+        catch(e) {
+            console.log(e);
         }
     }, function(response) {
       console.log(response);

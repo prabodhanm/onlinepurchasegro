@@ -18,6 +18,7 @@ import {RegisterPage} from '../register/register';
  */
 
 // @IonicPage()
+declare var cordova: any;
 @Component({
   selector: 'page-login',
   templateUrl: 'login.html',
@@ -81,9 +82,11 @@ export class LoginPage {
        cordova.plugin.http.get(url,
             params, headers, (response) => {
             this.storage.set('customerdata',JSON.parse(response.data).customers) ;
+            this.customers = JSON.parse(response.data).customers;
         }, function(response) {
           console.error(response.error);
         });
+        this.storage.set('customerupdate', false);
   }
   ionViewDidLoad() {
     // console.log('ionViewDidLoad LoginPage');

@@ -4,6 +4,7 @@ import { CartserviceProvider } from '../../../providers/cartservice/cartservice'
 import { ManagecustomersProvider } from '../../../providers/managecustomers/managecustomers';
 import {LoginPage} from '../../public/login/login';
 import { OrdersPage } from '../../orders/orders';
+import { ViewproductsPage } from '../../../pages/products/viewproducts/viewproducts';
 // import {CheckoutPage} from '../../checkout/checkout';
 import { Storage } from '@ionic/storage';
 import { InAppBrowser, InAppBrowserOptions } from '@ionic-native/in-app-browser/ngx';
@@ -88,7 +89,7 @@ export class ViewcartPage {
       this.loginuser = val;
     });
     // if(this.cart.length > 0) {
-      this.showlineitems();
+    this.showlineitems();
     // }
 
   }
@@ -111,11 +112,17 @@ export class ViewcartPage {
   showorders() {
     this.navCtrl.push(OrdersPage);
   }
+
+  doshopping(){
+    this.navCtrl.setRoot(ViewproductsPage);
+  }
+
+
   showlineitems(){
     //this.checkoutid = this.cartservice.getcheckoutid();
     this.storage.get('checkoutid')
     .then((val) => {
-      // console.log('checkout id in showlineitems...', val);
+      console.log('checkout id in showlineitems...', val);
       if(val == undefined || val == " "){
         this.isemptycart = true;
       }
@@ -181,6 +188,11 @@ export class ViewcartPage {
           // console.log(checkout.lineItems);
           //this.cart = this.cartservice.getcart();
           this.cartservice.removeFromCart(prod);
+          this.cart = this.cartservice.getcart();
+          // console.log('cart items...');
+          // console.log(this.cart);
+          this.calculateAmount();
+
         });
       });
     });

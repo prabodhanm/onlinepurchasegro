@@ -5,6 +5,7 @@ import Client from 'shopify-buy';
 import { Storage } from '@ionic/storage';
 import { ViewproductsPage } from '../../../pages/products/viewproducts/viewproducts';
 import { CartserviceProvider } from '../../../providers/cartservice/cartservice';
+import { ViewcartPage } from '../../cart/viewcart/viewcart';
 
 /**
  * Generated class for the DetailcartPage page.
@@ -25,10 +26,15 @@ export class DetailcartPage {
   prodcheckout: any;
   client: any;
   loginuser : string;
+  prodid : string;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private cartservice : CartserviceProvider, private storage: Storage) {
     this.prod = this.cartservice.getproduct();
+
+      this.storage.get('prodid').then((val : string) => {
+        this.prodid = val;
+      })
     console.log('prodcut details in detailcart constructor ', this.prod);
     this.client = Client.buildClient({
       domain: 'grocerium.exeliqconsulting.com',
@@ -45,6 +51,10 @@ export class DetailcartPage {
     this.storage.get("email").then((val : string) => {
       this.loginuser = val;
     });
+
+    this.storage.get('checkoutid').then((val : string)=> {
+      this.checkoutid = val;
+    })
   }
 
   openviewproduct() {
@@ -60,6 +70,7 @@ export class DetailcartPage {
 
     this.cartservice.addToCart(prodjson);
 
+    console.log('calling addlineitems function...');
     this.addlineitems();
   }
 
@@ -79,36 +90,29 @@ export class DetailcartPage {
   }
 
   addlineitems(){
-    this.checkoutid = this.cartservice.getcheckoutid();
+    // this.checkoutid = this.cartservice.getcheckoutid();
     // console.log('Adding line item for ' + this.prod.id);
-
+    console.log('Checkout id ', this.checkoutid);
+    console.log('Product id in addlineitems ', this.prod.id);
     if(this.checkoutid == undefined){
       this.client.checkout.create().then((checkout) => {
         this.prodcheckout = checkout;
         this.cartservice.setwebUrl(checkout.webUrl);
         this.cartservice.setcheckoutid(checkout.attrs.id.value);
+        this.storage.set('checkoutid',checkout.attrs.id.value);
         // console.log('web url = ' + checkout.webUrl);
         this.client.product.fetch(this.prod.id).then((product) => {
-          // console.log('Product details ');
-          // console.log(product);
-          var lineItemsToAdd = [
-            {
-              variantId: product.attrs.variants[0].id,
-              quantity: 1,
-              customAttributes: [{key: "prodid", value:this.prod.id}]
-            }
-          ];
+            var lineItemsToAdd = [
+              {
+                variantId: product.attrs.variants[0].id,
+                quantity: 1,
+                customAttributes: [{key: "prodid", value:this.prod.id}]
+              }
+            ];
 
-
-          // console.log('Line items details');
-          // console.log(lineItemsToAdd);
-
-          this.client.checkout.addLineItems(checkout.attrs.id.value, lineItemsToAdd).then((checkout) => {
-            // Do something with the updated checkout
-            // console.log(checkout.lineItems); // Array with one additional line item
-            // this.navCtrl.push(ViewproductsPage);
-            //this.nav.setRoot(ViewproductsPage);
-            this.navCtrl.setRoot(ViewproductsPage);
+            this.client.checkout.addLineItems(checkout.attrs.id.value, lineItemsToAdd).then((checkout) => {
+              console.log('Checkout after adding lineitems first time ', checkout);
+            this.navCtrl.setRoot(ViewcartPage);
           });
         });
       })
@@ -125,14 +129,10 @@ export class DetailcartPage {
           }
         ];
 
-        // console.log('Line items details');
-        // console.log(lineItemsToAdd);
-
         this.client.checkout.addLineItems(this.checkoutid, lineItemsToAdd).then((checkout) => {
           // Do something with the updated checkout
-          // console.log(checkout.lineItems); // Array with one additional line item
-          // this.navCtrl.push(ViewproductsPage);
-          this.navCtrl.setRoot(ViewproductsPage);
+          console.log('Checkout after adding lineitems not first time ', checkout);
+          this.navCtrl.setRoot(ViewcartPage);
         });
       });
     }

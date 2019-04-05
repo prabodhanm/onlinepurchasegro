@@ -174,7 +174,7 @@ export class ViewproductsPage {
 
   showdetailitems(prod){
     this.cartservice.setproduct(prod);
-    // this.router.navigate(['/detailcart']);
+    this.storage.set('prodid', prod.id);
     this.navCtrl.push(DetailcartPage);
   }
 
@@ -212,6 +212,7 @@ export class ViewproductsPage {
           this.cartservice.setwebUrl(checkout.webUrl);
           this.cartservice.setcheckoutid(checkout.attrs.id.value);
           this.storage.set('checkoutid',checkout.attrs.id.value);
+          console.log('Checkout id in viewproducts for detailscart ', checkout.attrs.id.value);
           this.storage.set('weburl',checkout.webUrl);
           // console.log('web url = ' + checkout.webUrl);
           this.client.product.fetch(prod.id).then((product) => {

@@ -36,9 +36,49 @@ export class OrdersPage {
       storefrontAccessToken: '5078ba324691cf957494dc2d661b8288'
     });
     this.storage.set("lastpagevisited","orders");
+
+    this.getorders();
   }
 
 
+  async getorders() {
+    const url = 'https://a761ca71e70728705c351a7a54622a8d:512cd73d33fea018252f63000bdf8e5f@grocerium-exelic-poc.myshopify.com/admin/orders.json';
+      const params = {};
+      let authheader = "Basic YTc2MWNhNzFlNzA3Mjg3MDVjMzUxYTdhNTQ2MjJhOGQ6NTEyY2Q3M2QzM2ZlYTAxODI1MmY2MzAwMGJkZjhlNWY=";
+      const headers = {
+        'Content-Type': 'application/json',
+        'Authorization' : authheader
+      };
+
+      console.log('url = ', url);
+
+      //Using cordova plugins start
+       cordova.plugin.http.get(url,
+            params, headers, (response) => {
+              console.log('Orders in getorders ', JSON.parse(response.data).orders);
+              this.orders = JSON.parse(response.data).orders;
+              for(let order of this.orders){
+                console.log('orderitem from orders ' , order);
+                if(order.email == this.loginuser){
+                  this.orderitem =
+                  {
+                    "orderno": order.name,
+                    "date" : order.created_at.substring(0,10),
+                    "customer" : order.billing_address.name,
+                    "paymentstatus" : order.financial_status,
+                    "total" : order.total_price
+                  };
+
+                  this.filterorders.push(this.orderitem);
+                  this.orderitem = {};
+                }
+              }
+              console.log('Filter orders ', this.filterorders);
+        }, function(response) {
+          console.error(response.error);
+        });
+        this.storage.set('customerupdate', false);
+  }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad OrdersPage');
@@ -48,7 +88,9 @@ export class OrdersPage {
       this.loginuser = val;
     });
 
-    this.managecustomers.getOrdersByCustomer()
+
+
+    /*this.managecustomers.getOrdersByCustomer()
     .subscribe((orders : any) => {
       this.orders = orders.orders;
       console.log('Orders placed ', this.orders);
@@ -81,7 +123,7 @@ export class OrdersPage {
 
 
       console.log('Filter orders ', this.filterorders);
-    })
+    })*/
   }
 
   logout() {

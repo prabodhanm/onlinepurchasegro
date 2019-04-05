@@ -8,6 +8,7 @@ import { ViewcartPage } from '../cart/viewcart/viewcart'
 // import {File} from '@ionic-native/file/ngx';
 import {GlobalProvider} from '../../providers/global/global';
 import { OrdersPage } from '../../pages/orders/orders'
+import Client from 'shopify-buy';
 
 @Component({
   selector: 'page-home',
@@ -18,7 +19,7 @@ export class HomePage {
 
   products: any;
   cart : any = [];
-
+  client : any;
   sliderOpts = {
     zoom: false,
     slidesPerView: 1.5,
@@ -34,10 +35,18 @@ export class HomePage {
 
   totalmenuitems : number = 0;
 
+  collectiondata : any = [];
+
   constructor(public navCtrl: NavController,
     private manageproducts : ManageproductsProvider,
     private storage: Storage, private cartservice : CartserviceProvider,
     private global : GlobalProvider) {
+      this.client = Client.buildClient({
+        domain: 'grocerium-exelic-poc.myshopify.com',
+        storefrontAccessToken: '5078ba324691cf957494dc2d661b8288'
+        // appId: '6'
+      });
+
       this.manageproducts.getproducts().then(products => {
         console.log('printing products in ionViewDidLoad method;')
         console.log(products);
@@ -47,6 +56,8 @@ export class HomePage {
       this.storage.get('menuitems').then((val : number)=> {
         this.totalmenuitems = val;
       });
+
+     // this.getsubpages();
   }
 
   ionViewDidLoad(){
@@ -56,6 +67,7 @@ export class HomePage {
 
     this.imgcollection = this.global.globalimages;
 
+    this.getsubpages();
     // this.platform.ready().then(() => {
     //   this.file.listDir('./assets/img/slider','directory').then((result) => {
     //     for(let file of result){
@@ -74,6 +86,31 @@ export class HomePage {
     this.cart = this.cartservice.getcart();
   }
 
+  getsubpages() {
+    let subpages : any = [];
+
+    let page : string;
+    // let re = /-/gi;
+    this.client.collection.fetchAllWithProducts()
+    .then((collections) => {
+      // this.collectiondata = collections;
+      for(let collection of collections){
+        console.log('Collection = ', collection);
+         page = collection.handle.toLowerCase();
+        //  page = page.replace(re,' ');
+         if(page != 'frontpage'){
+          this.collectiondata.push(collection);
+         }
+      }
+      console.log('Total Collectios in home ', this.collectiondata);
+    }).catch((error) => {
+      console.log(error);
+    })
+
+
+    // return subpages;
+  }
+
   viewcart(){
     // console.log('You click the image');
     this.cart = this.cartservice.getcart();
@@ -83,7 +120,6 @@ export class HomePage {
     if (this.cart.length > 0){
       this.navCtrl.push(ViewcartPage);
     }
-
   }
 
   logout() {

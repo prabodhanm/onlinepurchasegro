@@ -87,9 +87,6 @@ export class MyApp {
       // appId: '6'
     });
 
-    // console.log('Fetch admin products...');
-    // this.getadminproducts();
-
     this.pages = [
       {title:'Home',component:HomePage, url:'home'},
       {
@@ -104,7 +101,7 @@ export class MyApp {
       {title:'Create An Account',component:RegisterPage, url:'person-add'}
     ]
 
-console.log('Total menuitems ', this.pages.length);
+    console.log('Total menuitems ', this.pages.length);
     this.storage.set('menuitems',this.pages.length);
 
   }
@@ -114,7 +111,8 @@ console.log('Total menuitems ', this.pages.length);
     let singlesubpage : any;
     let page : string;
     let re = /-/gi;
-    this.client.collection.fetchAllWithProducts().then((collections) => {
+    this.client.collection.fetchAllWithProducts()
+    .then((collections) => {
       // console.log(this.prodsearch.replace(re,'-'));
       for(let collection of collections){
          page = collection.handle.toLowerCase();
@@ -125,7 +123,9 @@ console.log('Total menuitems ', this.pages.length);
           subpages.push(singlesubpage);
          }
       }
-    });
+    }).catch((error) => {
+      console.log(error);
+    })
 
     return subpages;
   }
@@ -162,36 +162,6 @@ console.log('Total menuitems ', this.pages.length);
     }
     console.log('Sub pages ' , subpages);
 
-    // this.pages = [
-    //   {title:'Home',component:HomePage, url:'home'},
-    //   {
-    //     title:'Products',
-    //     subpages : subpages,
-    //     component:ViewproductsPage,
-    //     url:''
-    //   },
-    //   {title:'About Us',component:AboutUsPage, url:''},
-    //   // {title:'Orders',component:OrdersPage, url:'home'},
-    //   {title:'Sign In',component:LoginPage, url:'log-in'},
-    //   {title:'Create An Account',component:RegisterPage, url:'person-add'}
-    // ]
-
-    // this.pages = [
-    //   {title:'Home',component:HomePage, url:'home'},
-    //   {
-    //     title:'Products',
-    //     //subpages : subpages,
-    //     component:ViewproductsPage,
-    //     url:''
-    //   },
-    //   {title:'About Us',component:AboutUsPage, url:''},
-    //   // {title:'Orders',component:OrdersPage, url:'home'},
-    //   {title:'Sign In',component:LoginPage, url:'log-in'},
-    //   {title:'Create An Account',component:RegisterPage, url:'person-add'}
-    // ]
-
-
-    // this.storage.set('menuitems',this.pages.length);
   }
 
   filtermoreproducts(productcategory) {
@@ -220,25 +190,11 @@ console.log('Total menuitems ', this.pages.length);
     this.storage.set('prodcategory',serVal.toLowerCase());
     this.menuCtrl.close();
     this.nav.setRoot(ViewproductsPage);
-    // for(let prod of this.products){
-    //   if(prod.tags.toLowerCase() === serVal.toLowerCase()){
-    //     this.morefilterproducts.push(prod);
-    //   }
-    // }
-
-
-    // console.log('filter products in getItems ', this.morefilterproducts);
-    // if(this.morefilterproducts.length > 0){
-    //   this.storage.set('filterproducts',this.morefilterproducts);
-    //   this.menuCtrl.close();
-    //   this.nav.setRoot(ViewproductsPage);
-    // }
   }
 
   toPascalCase(str){
      let returnval : string = "";
       str = str.toLowerCase().split(' ');
-      // console.log(str[0].charAt(0).toUpperCase());
       for (var i = 0; i < str.length; i++) {
         str[i] = str[i].charAt(0).toUpperCase() + str[i].slice(1);
         if(i < str.length -1){
@@ -260,20 +216,6 @@ console.log('Total menuitems ', this.pages.length);
     }, (error)=> {
       console.log('Error occurred ', error.error);
     });
-
-    // return this.manageproducts.getproducts().then((result : any) => {
-    //   console.log('Admin products in viewproducts ', result);
-    //   this.products = result.products;
-    //   return this.getproductsubpages();
-    // }, (error)=> {
-    //   console.log('Error occurred ', error.error);
-    // });
-
-    // this.manageproducts.getproducts().then(products => {
-    //   console.log('printing products in getadminproducts method;')
-    //   console.log(products);
-    //   this.products= products;
-    // })
 
   }
 
