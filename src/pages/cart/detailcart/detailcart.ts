@@ -98,9 +98,10 @@ export class DetailcartPage {
       this.client.checkout.create().then((checkout) => {
         this.prodcheckout = checkout;
         this.cartservice.setwebUrl(checkout.webUrl);
+        this.storage.set('weburl',checkout.webUrl);
         this.cartservice.setcheckoutid(checkout.attrs.id.value);
         this.storage.set('checkoutid',checkout.attrs.id.value);
-        // console.log('web url = ' + checkout.webUrl);
+        console.log('web url = ' + checkout.webUrl);
         this.client.product.fetch(this.prod.id).then((product) => {
             var lineItemsToAdd = [
               {

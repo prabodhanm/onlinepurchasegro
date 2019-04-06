@@ -37,7 +37,7 @@ export class OrdersPage {
     });
     this.storage.set("lastpagevisited","orders");
 
-    this.getorders();
+
   }
 
 
@@ -78,6 +78,10 @@ export class OrdersPage {
           console.error(response.error);
         });
         this.storage.set('customerupdate', false);
+  }
+
+  ionViewWillEnter() {
+    this.getorders();
   }
 
   ionViewDidLoad() {

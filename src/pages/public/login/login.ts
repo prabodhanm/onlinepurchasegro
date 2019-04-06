@@ -40,7 +40,7 @@ export class LoginPage {
     public navParams: NavParams, private managecustomers : ManagecustomersProvider,
     private storage : Storage) {
 
-      this.getlocalcustomers();
+      // this.getlocalcustomers();
       // this.managecustomers.getcustomersdata().then((val : any)=> {
       //   console.log('Customer data ', val);
       // })
@@ -50,20 +50,17 @@ export class LoginPage {
       //   console.log('Customer data in login ', val);
       // })
 
-      /*this.managecustomers.getCustomers()
+      this.managecustomers.getCustomers()
       .subscribe((result : any) => {
-        // this.customers = result;
+
         console.log(result.customers);
         this.customers = result.customers;
-        // console.log(result.customers[0].email);
-        // console.log(result.customers.length);
 
-        this.customers = result.customers;
         this.totalcustomers = this.customers.length;
         this.storage.set('customerdetails',this.customers);
       }, (error) => {
         console.log(error);
-      });*/
+      });
   }
 
 
