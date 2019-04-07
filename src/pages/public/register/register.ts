@@ -1,8 +1,12 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
-// import { ManagecustomersProvider } from '../../../providers/managecustomers/managecustomers';
-import { HomePage } from '../../home/home';
 import { Storage } from '@ionic/storage';
+
+import { ManagecustomersProvider } from '../../../providers/managecustomers/managecustomers';
+import { HomePage } from '../../home/home';
+import {ViewcartPage} from '../../cart/viewcart/viewcart';
+import {ViewproductsPage} from '../../products/viewproducts/viewproducts';
+import {OrdersPage} from '../../orders/orders';
 
 /**
  * Generated class for the RegisterPage page.
@@ -41,8 +45,14 @@ export class RegisterPage {
 
   allcustomersdata : any = {"customer":this.customerdata };
 
+  customers : any;
+  lastpagevisited : string;
+  emailfound : boolean = false;
+  errormsg : string;
+  customerid : string;
+
   constructor(public navCtrl: NavController, public navParams: NavParams,
-    private storage : Storage) {
+    private storage : Storage, private managecustomers : ManagecustomersProvider) {
       /*this.storage.get('customerdata').then((customer : any)=> {
         this.customerdetails = customer;
 
@@ -143,6 +153,8 @@ export class RegisterPage {
             this.customerdetails = JSON.parse(response.data).customers;
 
             console.log('Customer details in getlocalcustomers ', this.customerdetails);
+
+            this.logincustomer();
         }, function(response) {
           console.error(response.error);
         });
@@ -162,6 +174,7 @@ export class RegisterPage {
     cordova.plugin.http.setDataSerializer( "json" );
     cordova.plugin.http.put(url, customerdata, headers, function(response) {
       try {
+        this.getlocalcustomers();
         _this.navCtrl.push(HomePage);
         }
         catch(e) {
@@ -185,6 +198,7 @@ export class RegisterPage {
     cordova.plugin.http.setDataSerializer( "json" );
     cordova.plugin.http.post(url, customerdata, headers, function(response) {
       try {
+          this.getlocalcustomers();
         _this.navCtrl.push(HomePage);
         }
         catch(e) {
@@ -194,4 +208,90 @@ export class RegisterPage {
       console.log(response);
     });
   }
+
+  getcustomers() {
+    this.managecustomers.getCustomers()
+      .subscribe((result : any) => {
+
+        console.log(result.customers);
+        this.customers = result.customers;
+
+        this.storage.set('customerdetails',this.customers);
+      }, (error) => {
+        console.log(error);
+      });
+  }
+
+  logincustomer() {
+    this.storage.set('customerupdate', false);
+
+    for(let customer of this.customerdetails){
+
+      if(customer.email.toLowerCase() == this.email.toLowerCase() ){
+        this.emailfound = true;
+
+        this.customerid = customer.id;
+        this.storage.set('customerid',this.customerid);
+
+        if(customer.note.toLowerCase() != this.password.toLowerCase()){
+          this.emailfound = false;
+          this.storage.set('customerupdate', true);
+          this.storage.set('error','Invalid login credentials');
+          this.errormsg = "Invalid login credentials";
+          return;
+        }
+        this.storage.set("email", this.email.toLowerCase());
+        this.storage.set("password",this.password);
+
+        this.storage.set("fname",customer.first_name);
+        this.storage.set("lname",customer.last_name);
+
+        if(customer.orders_count > 0){
+          this.storage.set("address1",customer.default_address.address1);
+          this.storage.set("address2",customer.default_address.address2);
+          this.storage.set("city",customer.default_address.city);
+          this.storage.set("country",customer.default_address.country);
+          this.storage.set("phone",customer.default_address.phone);
+          // console.log('Phone number in login - ', customer.default_address.phone);
+          this.storage.set("province",customer.default_address.province_code);
+          this.storage.set("zip",customer.default_address.zip);
+        }
+
+        // console.log(this.)
+        this.storage.get('lastpagevisited').then((val : string) => {
+          this.lastpagevisited = val;
+          // console.log('Last Page Visited ' ,this.lastpagevisited);
+
+          if(this.lastpagevisited == null){
+            this.navCtrl.setRoot(HomePage);
+            //this.nav.setRoot(ViewproductsPage);
+          }
+          else if(this.lastpagevisited == "orders"){
+            this.navCtrl.setRoot(OrdersPage);
+            // this.nav.setRoot(ViewcartPage);
+          }
+          else {
+            this.storage.get('checkoutid').then((val : any)=> {
+              if(val == undefined || val == " ") {
+                this.navCtrl.setRoot(ViewproductsPage);
+              }
+              else {
+                this.navCtrl.setRoot(ViewcartPage);
+              }
+            })
+
+          }
+
+        })
+        this.errormsg = "";
+      }
+
+    }
+
+    if(!this.emailfound) {
+      this.storage.set('error','Invalid login credentials');
+      this.errormsg = "Invalid login credentials";
+    }
+  }
+
 }

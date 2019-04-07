@@ -23,33 +23,33 @@
 
 <ion-content padding>
   <ion-list>
-      <ion-item no-lines>
-          <ion-img src="./assets/img/mapexslogo_360x.jpg"></ion-img>
-      </ion-item>
-    <ion-item>
+    <ion-item no-lines>
+        <ion-img src="./assets/img/mapexslogo_360x.jpg"></ion-img>
+    </ion-item>
+    <ion-item no-lines>
       <ion-label class="headerlabel">Registration</ion-label>
     </ion-item>
-    <ion-item>
+    <ion-item no-lines>
       <ion-label position="floating">First Name</ion-label>
       <ion-input required type="text" [(ngModel)]="this.firstname"></ion-input>
     </ion-item>
 
-    <ion-item>
+    <ion-item no-lines>
       <ion-label position="floating">Last Name</ion-label>
       <ion-input required type="text" [(ngModel)]="this.lastname"></ion-input>
     </ion-item>
 
-    <ion-item>
+    <ion-item no-lines>
       <ion-label position="floating">Email</ion-label>
       <ion-input required type="text" [(ngModel)]="this.email"></ion-input>
     </ion-item>
 
-    <ion-item>
+    <ion-item no-lines>
       <ion-label position="floating">Password</ion-label>
       <ion-input required type="password" [(ngModel)]="this.password"></ion-input>
     </ion-item>
 
-    <ion-item>
+    <ion-item no-lines>
       <button ion-button  (click)="register()" expand="block">Create</button>
     </ion-item>
   </ion-list>

@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Storage } from '@ionic/storage';
 
 /*
   Generated class for the CartserviceProvider provider.
@@ -16,7 +17,7 @@ export class CartserviceProvider {
   _weburl : string;
   _prod : any;
 
-  constructor(public http: HttpClient) {
+  constructor(public http: HttpClient, public storage: Storage) {
     console.log('Hello CartserviceProvider Provider');
   }
 
@@ -43,6 +44,8 @@ export class CartserviceProvider {
         break;
       }
     }
+
+    this.storage.set('cart',this._cart);
 
     if(counter == -1){
       this._cart.push(JSON.parse(item));

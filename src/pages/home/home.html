@@ -1,14 +1,9 @@
 <ion-header>
-  <ion-navbar color="green">
-    <!-- <ion-buttons>
-      <ion-img src='src\assets\imgs\mapexslogo_360x.jpg'></ion-img>
-    </ion-buttons> -->
+  <!-- <ion-navbar color="green">
+
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <!-- <ion-title>
-      Home
-    </ion-title> -->
 
 
     <ion-buttons *ngIf="loginuser" end>
@@ -17,9 +12,9 @@
       </button>
 
       <ion-badge *ngIf="this.cart.length > 0">{{ this.cart.length }}</ion-badge>
-              <button ion-button icon-only (click)="viewcart()" size="small">
-                  <ion-icon name="cart"></ion-icon>
-              </button>
+      <button ion-button icon-only (click)="viewcart()" size="small">
+          <ion-icon name="cart"></ion-icon>
+      </button>
     </ion-buttons>
     <ion-buttons end>
       <button ion-button icon-only (click)="showorders()">
@@ -27,8 +22,39 @@
       </button>
     </ion-buttons>
     <ion-label class="userlabel">Login as: <br>{{this.loginuser}}</ion-label>
-    <!-- <ion-label class="userlabel">{{this.loginuser}}</ion-label> -->
-  </ion-navbar>
+    <ion-label class="userlabel">{{this.loginuser}}</ion-label>
+  </ion-navbar> -->
+
+  <ion-navbar color="green">
+      <!-- <ion-list color="danger" no-lines> -->
+          <button ion-button menuToggle>
+              <ion-icon name="menu"></ion-icon>
+            </button>
+
+          <ion-buttons end>
+            <ion-badge *ngIf="this.cart.length > 0">{{ this.cart.length }}</ion-badge>
+              <button ion-button icon-only (click)="viewcart()" size="small">
+                  <ion-icon name="cart"></ion-icon>
+              </button>
+          </ion-buttons>
+
+            <ion-label class="userlabel" right>Login as:{{this.loginuser}}</ion-label>
+            <!-- <ion-label class="user-label" right></ion-label> -->
+            <ion-buttons *ngIf="loginuser" end>
+              <button ion-button icon-only (click)="logout()">
+              <ion-icon name="log-out"></ion-icon>
+            </button>
+          </ion-buttons>
+
+          <ion-buttons end>
+              <button ion-button icon-only (click)="showorders()">
+                <img src="../../../assets/icon/productorder.png" class="image">
+              </button>
+          </ion-buttons>
+      <!-- </ion-list> -->
+
+    </ion-navbar>
+
 </ion-header>
 <!-- src\assets\imgs\mapexslogo_360x.jpg -->
 <ion-content>
@@ -48,13 +74,62 @@
           </ion-slides>
       </ion-item>
 
-      <!-- <ion-grid>
-        <ion-row>
-          <ion-col *ngFor= "let collection of this.collectiondata">
+      <ion-item no-lines ion-padding-top>
+          <ion-grid>
+              <ion-row>
+                <ion-col class="shopforheader">Shop For</ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col *ngFor= "let collection of this.collectiondata">
+                    <ion-thumbnail>
+                        <img src={{collection.src}}>
+                    </ion-thumbnail>
 
-          </ion-col>
-        </ion-row>
-      </ion-grid> -->
+                    <ion-label text-wrap>{{collection.title}}</ion-label>
+                </ion-col>
+              </ion-row>
+
+
+            </ion-grid>
+      </ion-item>
+
+
+      <!-- <ion-content>
+        <ion-item *ngFor= "let collection of this.collectiondata">
+          <ion-label>Featured Collection</ion-label>
+          <ion-item *ngFor= "let prod of collection.products" no-lines>
+            <ion-thumbnail>
+                <img src={{prod.images[0].src}}>
+            </ion-thumbnail>
+
+              <ion-label>{{prod.title}}</ion-label>
+              <ion-label>{{prod.variants[0].price}}</ion-label>
+          </ion-item>
+        </ion-item>
+
+      </ion-content> -->
+
+      <ion-grid>
+          <ion-row *ngFor= "let collection of this.allcollectiondata">
+            <ion-item>
+                <ion-label class="shopforheader">Featured Collection</ion-label>
+            </ion-item>
+
+            <ion-col>
+                <ion-grid>
+                    <ion-row  *ngFor= "let prod of collection.products">
+                        <ion-col>
+                            <img src={{prod.images[0].src}}>
+                            <ion-label>{{prod.title}}</ion-label>
+                            <ion-label>{{prod.variants[0].price}}</ion-label>
+                        </ion-col>
+                    </ion-row>
+                  </ion-grid>
+            </ion-col>
+
+
+            </ion-row>
+      </ion-grid>
 </ion-content>
 
 <!-- [effect]="'converflow'" -->

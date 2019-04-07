@@ -45,10 +45,23 @@ export class ViewproductsPage {
       this.storage.get("email").then((val : string) => {
         this.loginuser = val;
         this.storage.get('checkoutid').then((val : any)=> {
+          console.log('Checkout id in viewproducts constructor ', val);
+          console.log('Cart length ', this.cart.length);
           if(val == undefined || val == " "){
             this.cart = [];
             this.cartservice.setcart(this.cart);
-
+          }
+          else {
+            this.storage.get('cart').then((val : any) => {
+              console.log('Cart value ', val);
+              if(val != null) {
+                this.cart = val;
+              }
+              else {
+                this.cart = [];
+              }
+              this.cartservice.setcart(this.cart);
+            })
           }
         })
       });

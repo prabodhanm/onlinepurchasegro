@@ -37,6 +37,14 @@ export class HomePage {
 
   collectiondata : any = [];
 
+  allcollectiondata : any = [];
+
+  collectionitem : any = {
+    "title" : "",
+    "src" : "",
+    "price" : 0
+  }
+
   constructor(public navCtrl: NavController,
     private manageproducts : ManageproductsProvider,
     private storage: Storage, private cartservice : CartserviceProvider,
@@ -57,7 +65,7 @@ export class HomePage {
         this.totalmenuitems = val;
       });
 
-     // this.getsubpages();
+     this.getsubpages();
   }
 
   ionViewDidLoad(){
@@ -67,7 +75,7 @@ export class HomePage {
 
     this.imgcollection = this.global.globalimages;
 
-    this.getsubpages();
+
     // this.platform.ready().then(() => {
     //   this.file.listDir('./assets/img/slider','directory').then((result) => {
     //     for(let file of result){
@@ -82,15 +90,44 @@ export class HomePage {
       if(val == undefined || val == " "){
         this.cartservice.setcart([]);
       }
+      else {
+        this.storage.get('cart').then((val : any) => {
+          console.log('Cart value ', val);
+          if(val != null) {
+            this.cart = val;
+          }
+          else {
+            this.cart = [];
+          }
+          this.cartservice.setcart(this.cart);
+        })
+      }
     });
-    this.cart = this.cartservice.getcart();
+    // this.cart = this.cartservice.getcart();
+
   }
+
+  toPascalCase(str){
+    let returnval : string = "";
+     str = str.toLowerCase().split(' ');
+     for (var i = 0; i < str.length; i++) {
+       str[i] = str[i].charAt(0).toUpperCase() + str[i].slice(1);
+       if(i < str.length -1){
+         returnval += str[i] + " ";
+       }
+       else {
+         returnval += str[i] ;
+       }
+     }
+   return returnval;
+ }
 
   getsubpages() {
     let subpages : any = [];
 
     let page : string;
-    // let re = /-/gi;
+    let re = /-/gi;
+    let title : string;
     this.client.collection.fetchAllWithProducts()
     .then((collections) => {
       // this.collectiondata = collections;
@@ -99,10 +136,17 @@ export class HomePage {
          page = collection.handle.toLowerCase();
         //  page = page.replace(re,' ');
          if(page != 'frontpage'){
-          this.collectiondata.push(collection);
+           console.log('Collection is ', collection);
+          this.collectionitem.src = collection.products[0].images[0].src;
+          this.collectionitem.price = collection.products[0].variants[0].price;
+          title = this.toPascalCase(collection.handle.replace(re , ' '));
+          this.collectionitem.title = title ;
+          this.collectiondata.push(this.collectionitem);
+          this.allcollectiondata.push(collection);
+          this.collectionitem  = {};
          }
       }
-      console.log('Total Collectios in home ', this.collectiondata);
+      console.log('Total Collectios in home ', this.allcollectiondata);
     }).catch((error) => {
       console.log(error);
     })

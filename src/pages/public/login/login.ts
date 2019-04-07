@@ -40,7 +40,7 @@ export class LoginPage {
     public navParams: NavParams, private managecustomers : ManagecustomersProvider,
     private storage : Storage) {
 
-      // this.getlocalcustomers();
+      this.getlocalcustomers();
       // this.managecustomers.getcustomersdata().then((val : any)=> {
       //   console.log('Customer data ', val);
       // })
@@ -50,7 +50,7 @@ export class LoginPage {
       //   console.log('Customer data in login ', val);
       // })
 
-      this.managecustomers.getCustomers()
+      /*this.managecustomers.getCustomers()
       .subscribe((result : any) => {
 
         console.log(result.customers);
@@ -60,7 +60,7 @@ export class LoginPage {
         this.storage.set('customerdetails',this.customers);
       }, (error) => {
         console.log(error);
-      });
+      });*/
   }
 
 
@@ -85,6 +85,8 @@ export class LoginPage {
         });
         this.storage.set('customerupdate', false);
   }
+
+
   ionViewDidLoad() {
     // console.log('ionViewDidLoad LoginPage');
 
@@ -92,12 +94,6 @@ export class LoginPage {
 
   login(){
     this.storage.set('customerupdate', false);
-    // this.storage.get('email').then((val : string)=> {
-    //   if(val != ""){
-    //     this.isLogin = true;
-    //     return;
-    //   }
-    // });
 
     for(let customer of this.customers){
 
@@ -170,8 +166,6 @@ export class LoginPage {
   }
 
   register(){
-    //this.router.navigate(['/register']);
-    // const browser = this.iab.create('https://mapexs.com/account/register', '_system', {location:'yes'});
     this.navCtrl.push(RegisterPage);
   }
 }

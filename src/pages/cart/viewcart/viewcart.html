@@ -32,7 +32,6 @@
     </ion-buttons>
   </ion-navbar>
 
-
 </ion-header>
 
 
@@ -42,92 +41,61 @@
     </ion-item>
     <ion-grid *ngIf="!this.isemptycart">
         <ion-row>
-          <ion-col></ion-col>
-          <ion-col class="cart-label" size="auto">Title</ion-col>
-          <ion-col class="cart-label" size="auto">Qty</ion-col>
-          <ion-col class="cart-label" size="auto">Price</ion-col>
-          <ion-col></ion-col>
-          <ion-col></ion-col>
+          <ion-col col-2></ion-col>
+          <ion-col col-2 class="cart-label" size="auto">Title</ion-col>
+          <ion-col col-2 class="cart-label" size="auto">Qty</ion-col>
+          <ion-col col-2 class="cart-label" size="auto">Price</ion-col>
+          <ion-col col-2></ion-col>
+          <ion-col col-2></ion-col>
           <!-- <ion-col></ion-col> -->
         </ion-row>
         <ion-row *ngFor="let item of this.cart">
-          <ion-col>
+          <ion-col col-2>
               <!-- <ion-thumbnail> -->
                   <img class="cartimg" src="{{item.image}}" />
               <!-- </ion-thumbnail> -->
           </ion-col>
-          <ion-col class="cart-label">{{item.title}}</ion-col>
-          <ion-col class="cart-label">{{item.qty}}</ion-col>
-          <ion-col  class="cart-label">{{item.price}}</ion-col>
-          <ion-col>
-              <button ion-button (click)="removeitemfromcart(item)" class="grid-button" outline size="small">
-                <ion-icon name="close"></ion-icon>
+          <ion-col col-2 class="cart-label">{{item.title}}</ion-col>
+          <ion-col col-2 class="cart-label">{{item.qty}}</ion-col>
+          <ion-col col-2  class="cart-label">{{item.price}}</ion-col>
+          <ion-col  col-1>
+              <button ion-button icon-only (click)="removeitemfromcart(item)" class="grid-button" outline size="small">
+                <ion-icon name="close-circle-outline"></ion-icon>
               </button>
-              <!-- <button ion-button icon-only (click)="reduceqty(item)" class="grid-button" outline size="small">
-                  <ion-icon name="remove"></ion-icon>
-                </button> -->
           </ion-col>
-          <ion-col>
+          <ion-col  col-1>
               <button ion-button icon-only (click)="reduceqty(item)" class="grid-button" outline size="small">
                 <ion-icon name="remove"></ion-icon>
               </button>
           </ion-col>
-          <ion-col>
+          <ion-col col-1>
               <button ion-button icon-only (click)="addqty(item)" class="grid-button" outline size="small">
                 <ion-icon name="add-circle-outline"></ion-icon>
               </button>
           </ion-col>
         </ion-row>
       </ion-grid>
-      <!-- <ion-icon name="remove"></ion-icon> -->
-        <!-- <ion-item *ngFor="let item of this.cart"> -->
-          <!-- <ion-thumbnail (click)=showitemdetails()> -->
-          <!-- <img src="{{item.image}}"> -->
-          <!-- style="width: 12vh;height: 10vh;" -->
-          <!-- <ion-thumbnail>
-              <img src="{{item.image}}" />
-          </ion-thumbnail> -->
-          <!-- </ion-thumbnail> -->
-          <!-- <ion-label></ion-label> -->
-          <!-- <ion-label text-wrap class="cart-label" padding-left>{{item.title}}</ion-label> -->
-          <!-- <ion-label class="cart-label">{{item.qty}}</ion-label> -->
-          <!-- <ion-label class="cart-label">{{item.price}}</ion-label> -->
-          <!-- <button ion-button icon-only (click)="removeitemfromcart(item)"> -->
-            <!-- <ion-icon name="backspace"></ion-icon> -->
-          <!-- </button> -->
-          <!-- <button ion-button (click)="removeitemfromcart(item)"><ion-icon name="close"></ion-icon></button> -->
-          <!-- <button ion-button icon-only (click)="reduceqty(item)"><ion-icon name="remove"></ion-icon></button> -->
-          <!-- <button ion-button  (click)="reduceqty(item)"><ion-icon name="remove"></ion-icon></button> -->
-          <!-- <button ion-button icon-only (click)="addqty(item)"><ion-icon name="add-circle-outline"></ion-icon></button> -->
-        <!-- </ion-item> -->
-        <!-- <ion-item>
-          <ion-label class="cart-header-label">Total:</ion-label>
-          <span class="cart-header-label" color="primary" slot="end">{{ this.totalAmt | currency:'Rs.':'symbol' }}</span>
-        </ion-item>
-        <ion-item>
-            <button ion-button (click)="checkout()">Checkout</button>
-        </ion-item> -->
 
 
 
-            <ion-grid>
-              <ion-row>
-                <ion-col class="cart-header-label">Total:</ion-col>
-                <ion-col class="cart-header-label">{{ this.totalAmt | currency:'Rs.':'symbol' }}</ion-col>
-              </ion-row>
-              <ion-row>
-                <ion-col>
-                    <button ion-button (click)="checkout()" class="checkoutbutton">Buy Now</button>
-                </ion-col>
 
-              </ion-row>
-              <ion-row>
-                <ion-col>
-                  <!-- <button ion-button (click)="doshopping()" class="checkoutbutton">Continue Shopping</button> -->
-                  <a button (click)="doshopping()" class="imgclass">Continue Shopping</a>
-              </ion-col>
-              </ion-row>
-            </ion-grid>
+      <ion-grid>
+        <ion-row>
+          <ion-col class="cart-header-label">Total:</ion-col>
+          <ion-col class="cart-header-label">{{ this.totalAmt | currency:'Rs.':'symbol' }}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+              <button ion-button (click)="checkout()" class="checkoutbutton">Buy Now</button>
+          </ion-col>
+
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <a button (click)="doshopping()" class="imgclass">Continue Shopping</a>
+        </ion-col>
+        </ion-row>
+      </ion-grid>
 </ion-content>
 
 
