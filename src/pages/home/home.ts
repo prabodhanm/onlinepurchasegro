@@ -4,6 +4,10 @@ import { Storage } from '@ionic/storage';
 import { ManageproductsProvider } from '../../providers/manageproducts/manageproducts';
 import { CartserviceProvider } from '../../providers/cartservice/cartservice';
 import { ViewcartPage } from '../cart/viewcart/viewcart'
+import { ViewproductsPage} from '../products/viewproducts/viewproducts';
+import {DetailcartPage} from '../cart/detailcart/detailcart';
+import {EmptycartPage} from '../cart/emptycart/emptycart';
+
 // import { FilePath } from '@ionic-native/file-path/ngx';
 // import {File} from '@ionic-native/file/ngx';
 import {GlobalProvider} from '../../providers/global/global';
@@ -42,7 +46,8 @@ export class HomePage {
   collectionitem : any = {
     "title" : "",
     "src" : "",
-    "price" : 0
+    "price" : 0,
+    "products" : []
   }
 
   constructor(public navCtrl: NavController,
@@ -102,9 +107,19 @@ export class HomePage {
           this.cartservice.setcart(this.cart);
         })
       }
+      // this.storage.set('cart',[]);
+      // this.cartservice.setcart([]);
+      // this.cart = [];
+      // this.storage.set('checkoutid', " ");
     });
     // this.cart = this.cartservice.getcart();
 
+  }
+
+  showdetailitems(prod){
+    this.cartservice.setproduct(prod);
+    this.storage.set('prodid', prod.id);
+    this.navCtrl.push(DetailcartPage);
   }
 
   toPascalCase(str){
@@ -120,6 +135,13 @@ export class HomePage {
        }
      }
    return returnval;
+ }
+
+ showproducts(collection) {
+  console.log('collection in home ' , collection);
+  // this.storage.set('products', collection.products);
+  this.storage.set('prodcategory',collection.title);
+  this.navCtrl.setRoot(ViewproductsPage);
  }
 
   getsubpages() {
@@ -141,6 +163,8 @@ export class HomePage {
           this.collectionitem.price = collection.products[0].variants[0].price;
           title = this.toPascalCase(collection.handle.replace(re , ' '));
           this.collectionitem.title = title ;
+          this.collectionitem.products = collection.products;
+
           this.collectiondata.push(this.collectionitem);
           this.allcollectiondata.push(collection);
           this.collectionitem  = {};
@@ -163,6 +187,9 @@ export class HomePage {
     console.log('Print cart details in home ', this.cart);
     if (this.cart.length > 0){
       this.navCtrl.push(ViewcartPage);
+    }
+    else {
+      this.navCtrl.push(EmptycartPage);
     }
   }
 

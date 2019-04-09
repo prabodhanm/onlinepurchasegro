@@ -44,6 +44,8 @@ import { ManageproductsProvider } from '../providers/manageproducts/manageproduc
 import {AboutUsPage} from '../pages/about-us/about-us';
 import { LoginPage } from '../pages/public/login/login';
 import {RegisterPage} from '../pages/public/register/register';
+
+
 import { Storage } from '@ionic/storage';
 import Client from 'shopify-buy';
 // import Client from 'shopify-buy';

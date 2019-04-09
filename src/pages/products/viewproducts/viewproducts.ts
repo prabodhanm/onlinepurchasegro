@@ -7,6 +7,7 @@ import { DetailcartPage } from '../../cart/detailcart/detailcart';
 import { Storage } from '@ionic/storage';
 import Client from 'shopify-buy';
 import { OrdersPage } from '../../orders/orders';
+import {EmptycartPage} from '../../cart/emptycart/emptycart';
 /**
  * Generated class for the ViewproductsPage page.
  *
@@ -42,8 +43,10 @@ export class ViewproductsPage {
         // appId: '6'
       });
 
+
       this.storage.get("email").then((val : string) => {
         this.loginuser = val;
+        console.log('login user in view products constructor ', this.loginuser);
         this.storage.get('checkoutid').then((val : any)=> {
           console.log('Checkout id in viewproducts constructor ', val);
           console.log('Cart length ', this.cart.length);
@@ -69,7 +72,6 @@ export class ViewproductsPage {
 
   ionViewDidLoad() {
 
-    // this.storage.set('checkoutid', " ");
     this.storage.get('prodcategory').then((val:any)=> {
       this.prodsearch = val;
 
@@ -87,22 +89,42 @@ export class ViewproductsPage {
             this.products = collection.products;
             break;
           }
-
         }
       });
-
-
-      // this.manageproducts.getproducts().then(products => {
-      //   this.products= products;
-      //   console.log('Storefront products are ', this.products);
-      //   this.storage.get('baseproducts').then((val : any)=> {
-      //     this.baseproducts = val;
-      //     console.log('Base products are ', this.baseproducts);
-      //     this.filterbaseproducts();
-
-      //   })
-      // })
     })
+
+    // this.storage.set('checkoutid', " ");
+
+   /* this.storage.get('products').then((prods: any)=> {
+      if(prods.length > 0){
+        this.products = prods;
+        console.log('products received from home page in product view details load ', this.products);
+      }
+      else {
+        this.storage.get('prodcategory').then((val:any)=> {
+          this.prodsearch = val;
+
+          if(this.prodsearch == "atta"){
+            this.prodsearch = "chakki-fresh-atta";
+          }
+          //Fetch collections
+          this.client.collection.fetchAllWithProducts().then((collections) => {
+            this.prodsearch = this.prodsearch.toLowerCase();
+            let re = / /gi;
+            // console.log(this.prodsearch.replace(re,'-'));
+            for(let collection of collections){
+              // console.log(collection.handle);
+              if(this.prodsearch.replace(re,'-') == collection.handle.toLowerCase()) {
+                this.products = collection.products;
+                break;
+              }
+            }
+          });
+        })
+      }
+    });*/
+
+
   }
 
   ionViewWillEnter() {
@@ -181,6 +203,9 @@ export class ViewproductsPage {
     // this.router.navigateByUrl('viewmycart');
     if(this.cart.length > 0){
       this.navCtrl.push(ViewcartPage);
+    }
+    else {
+      this.navCtrl.push(EmptycartPage);
     }
 
   }

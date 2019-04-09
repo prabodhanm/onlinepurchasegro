@@ -41,7 +41,7 @@ export class OrdersPage {
   }
 
 
-  async getorders() {
+   getorders() {
     const url = 'https://a761ca71e70728705c351a7a54622a8d:512cd73d33fea018252f63000bdf8e5f@grocerium-exelic-poc.myshopify.com/admin/orders.json';
       const params = {};
       let authheader = "Basic YTc2MWNhNzFlNzA3Mjg3MDVjMzUxYTdhNTQ2MjJhOGQ6NTEyY2Q3M2QzM2ZlYTAxODI1MmY2MzAwMGJkZjhlNWY=";
@@ -81,7 +81,7 @@ export class OrdersPage {
   }
 
   ionViewWillEnter() {
-    this.getorders();
+    // this.getorders();
   }
 
   ionViewDidLoad() {
@@ -91,7 +91,7 @@ export class OrdersPage {
     this.storage.get("email").then((val : string) => {
       this.loginuser = val;
     });
-
+    this.getorders();
 
 
     /*this.managecustomers.getOrdersByCustomer()

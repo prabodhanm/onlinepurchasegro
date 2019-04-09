@@ -129,6 +129,7 @@ export class ViewcartPage {
       else {
         this.isemptycart = false;
         this.checkoutid = val;
+        console.log('Checkoiut id in viewcart showlineitems ', this.checkoutid);
         this.getcheckoutitemdetails();
       }
 
@@ -146,6 +147,7 @@ export class ViewcartPage {
       var prodjson = "";
       for(let i = 0; i< checkout.lineItems.length;i++){
         // console.log('Variant id is ' + checkout.lineItems[i].variant.id);
+        console.log('checkout items length in viewcart ', checkout.lineItems.length);
         prodjson = '{"id":"' + checkout.lineItems[i].customAttributes[0].value
         + '","title":"' +  checkout.lineItems[i].title
         + '","image":"' + checkout.lineItems[i].variant.image.src
@@ -158,7 +160,7 @@ export class ViewcartPage {
         this.cartservice.addToCart(prodjson);
       }
       this.cart = this.cartservice.getcart();
-      // console.log('cart items...');
+      console.log('cart items...', this.cart);
       // console.log(this.cart);
       this.calculateAmount();
 
@@ -189,9 +191,14 @@ export class ViewcartPage {
           //this.cart = this.cartservice.getcart();
           this.cartservice.removeFromCart(prod);
           this.cart = this.cartservice.getcart();
+          this.storage.set('cart',this.cart);
           // console.log('cart items...');
           // console.log(this.cart);
           this.calculateAmount();
+
+          if(this.cart.length == 0){
+            this.storage.set('checkoutid'," ");
+          }
 
         });
       });

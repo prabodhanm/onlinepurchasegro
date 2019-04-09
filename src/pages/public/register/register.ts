@@ -90,9 +90,9 @@ export class RegisterPage {
       'note' : this.password
     } ;
 
-    this.allcustomersdata.customer = this.customerdata;
-    //Check email exists
 
+    //Check email exists
+    this.allcustomersdata.customer = this.customerdata;
     let emailfound : boolean = false;
     let notefound : boolean = true;
     for(let cust of this.customerdetails){
@@ -116,6 +116,7 @@ export class RegisterPage {
 
     if(emailfound && notefound) {
       this.userexistswithpwd = true;
+      // this.navCtrl.push(HomePage);
       return;
     }
 
@@ -126,9 +127,11 @@ export class RegisterPage {
 
 
     if(this.updateuser) {
+      console.log('Updating customer');
       this.updatecustomer(this.updatecustomerdata);
     }
     else {
+      console.log('Registering customer');
       this.registercustomer(this.allcustomersdata);
     }
 
@@ -154,7 +157,10 @@ export class RegisterPage {
 
             console.log('Customer details in getlocalcustomers ', this.customerdetails);
 
-            this.logincustomer();
+            if(this.email != undefined && this.email != " ") {
+              this.logincustomer();
+            }
+
         }, function(response) {
           console.error(response.error);
         });
@@ -174,8 +180,20 @@ export class RegisterPage {
     cordova.plugin.http.setDataSerializer( "json" );
     cordova.plugin.http.put(url, customerdata, headers, function(response) {
       try {
-        this.getlocalcustomers();
-        _this.navCtrl.push(HomePage);
+        // _this.getlocalcustomers();
+        _this.setcustomer();
+
+        _this.storage.get('lastpagevisited').then((val : string) => {
+          if(val == 'orders') {
+            _this.navCtrl.setRoot(OrdersPage);
+          }
+          else if(val == 'viewcart'){
+            _this.navCtrl.push(ViewcartPage);
+          }
+          else {
+            _this.navCtrl.setRoot(HomePage);
+          }
+        });
         }
         catch(e) {
             console.log(e);
@@ -198,8 +216,21 @@ export class RegisterPage {
     cordova.plugin.http.setDataSerializer( "json" );
     cordova.plugin.http.post(url, customerdata, headers, function(response) {
       try {
-          this.getlocalcustomers();
-        _this.navCtrl.push(HomePage);
+        // _this.getlocalcustomers();
+        _this.setcustomer();
+
+        _this.storage.get('lastpagevisited').then((val : string) => {
+          if(val == 'orders') {
+            _this.navCtrl.setRoot(OrdersPage);
+          }
+          else if(val == 'viewcart'){
+            _this.navCtrl.push(ViewcartPage);
+          }
+          else {
+            _this.navCtrl.setRoot(HomePage);
+          }
+        });
+
         }
         catch(e) {
             console.log(e);
@@ -207,6 +238,23 @@ export class RegisterPage {
     }, function(response) {
       console.log(response);
     });
+  }
+
+
+  setcustomer() {
+    this.storage.set("address1", " ");
+    this.storage.set("address2", " ");
+    this.storage.set("city", " ");
+    this.storage.set("country", " ");
+    this.storage.set("fname", this.firstname);
+    this.storage.set("lname", this.lastname);
+    this.storage.set("phone"," ");
+    this.storage.set("province"," ");
+    this.storage.set("zip", " ");
+
+    this.storage.set("email", this.email.toLowerCase());
+    this.storage.set("password",this.password);
+
   }
 
   getcustomers() {
@@ -227,12 +275,16 @@ export class RegisterPage {
 
     for(let customer of this.customerdetails){
 
-      if(customer.email.toLowerCase() == this.email.toLowerCase() ){
+      console.log('Customer email ', customer.email);
+      console.log('Email ' , this.email);
+      if(customer.email.toLowerCase() == this.allcustomersdata.customer.email.toLowerCase() ){
         this.emailfound = true;
 
         this.customerid = customer.id;
         this.storage.set('customerid',this.customerid);
 
+        console.log('Customer Note ', customer.note);
+        console.log('Password ' , this.password);
         if(customer.note.toLowerCase() != this.password.toLowerCase()){
           this.emailfound = false;
           this.storage.set('customerupdate', true);

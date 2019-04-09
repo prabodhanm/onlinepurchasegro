@@ -82,7 +82,7 @@
               <ion-row>
                 <ion-col *ngFor= "let collection of this.collectiondata">
                     <ion-thumbnail>
-                        <img src={{collection.src}}>
+                        <img (click)="showproducts(collection)" src={{collection.src}} class="imgclass">
                     </ion-thumbnail>
 
                     <ion-label text-wrap>{{collection.title}}</ion-label>
@@ -119,7 +119,7 @@
                 <ion-grid>
                     <ion-row  *ngFor= "let prod of collection.products">
                         <ion-col>
-                            <img src={{prod.images[0].src}}>
+                            <img src={{prod.images[0].src}} class="imgclass" (click)="showdetailitems(prod)">
                             <ion-label>{{prod.title}}</ion-label>
                             <ion-label>{{prod.variants[0].price}}</ion-label>
                         </ion-col>
