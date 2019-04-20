@@ -42,9 +42,9 @@
     <ion-grid *ngIf="!this.isemptycart">
         <ion-row>
           <ion-col col-2></ion-col>
-          <ion-col col-2 class="cart-label" size="auto">Title</ion-col>
-          <ion-col col-2 class="cart-label" size="auto">Qty</ion-col>
-          <ion-col col-2 class="cart-label" size="auto">Price</ion-col>
+          <ion-col col-3 class="cart-header" size="auto">Title</ion-col>
+          <ion-col col-2 class="cart-header" size="auto">Qty</ion-col>
+          <ion-col col-2 class="cart-header" size="auto">Price</ion-col>
           <ion-col col-2></ion-col>
           <ion-col col-2></ion-col>
           <!-- <ion-col></ion-col> -->
@@ -55,11 +55,11 @@
                   <img class="cartimg" src="{{item.image}}" />
               <!-- </ion-thumbnail> -->
           </ion-col>
-          <ion-col col-2 class="cart-label">{{item.title}}</ion-col>
+          <ion-col col-3 class="cart-label">{{item.title}}</ion-col>
           <ion-col col-2 class="cart-label">{{item.qty}}</ion-col>
           <ion-col col-2  class="cart-label">{{item.price}}</ion-col>
           <ion-col  col-1>
-              <button ion-button icon-only (click)="removeitemfromcart(item)" class="grid-button" outline size="small">
+              <button ion-button icon-only (click)="removeitemfromcart(item)"  class="grid-button" outline size="small">
                 <ion-icon name="close-circle"></ion-icon>
               </button>
           </ion-col>

@@ -88,12 +88,7 @@ export class CartserviceProvider {
 
   removeFromCart(item){
 
-    // let counter: number = 0;
-    /*alert(item);
-    alert(this._cart);*/
     var index = this._cart.indexOf(item);
-    // alert(index);
-    // alert('Index found at ' + index);
     this._cart.splice(index,1);
   }
 

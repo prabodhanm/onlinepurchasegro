@@ -81,17 +81,53 @@ export class ViewcartPage {
   }
 
   ionViewWillEnter() {
-    //this.cart = this.cartservice.getcart();
-    //this.storage.set("email", "");
-    //console.log('Email in ionViewWillEnter is ', this.storage.get("email").then(val => {}));
-    this.storage.get("email").then((val : string)=>{
-      // console.log('Email in ionViewWillEnter is ', val);
-      this.loginuser = val;
-    });
-    // if(this.cart.length > 0) {
-    this.showlineitems();
-    // }
 
+    //const checkoutId = '2U4NWNkYzI4ZWEyOTdlOD9rZXk9MDVjMzY3Zjk3YWM0YWJjNGRhMTkwMDgwYTUzOGJmYmI='
+
+    this.storage.get('checkoutid').then((val : string)=> {
+      // this.client.checkout.fetch(val).then((checkout) => {
+      //   // Do something with the checkout
+      //   console.log('Displaying checkout details in ionViewWillEnter');
+      //   console.log('chekcout details in ionViewWillEnter' , checkout);
+      // })
+
+      const shippingAddress = {
+        address1: ' ',
+        address2: ' ',
+        city: ' ',
+        company: null,
+        country: ' ',
+        firstName: ' ',
+        lastName: ' ',
+        phone: ' ',
+        province: ' ',
+        zip: ' '
+      };
+
+      this.storage.get("email").then((val : string)=>{
+        // console.log('Email in ionViewWillEnter is ', val);
+        this.loginuser = val;
+      });
+
+     // Update the shipping address for an existing checkout.
+     this.client.checkout.updateShippingAddress(val, shippingAddress).then(checkout => {
+       // Do something with the updated checkout
+       this.showlineitems();
+     }).catch((error) => {
+       console.log(error);
+       this.storage.set('cart',[]);
+       this.cart = [];
+     })
+    })
+    .catch((error) => {
+      console.log(error);
+    })
+
+
+
+    // if(this.cart.length > 0) {
+
+    // }
   }
 
   logout() {
@@ -142,7 +178,7 @@ export class ViewcartPage {
   getcheckoutitemdetails(){
     this.cartservice.clearCart();
     this.client.checkout.fetch(this.checkoutid).then((checkout) => {
-      // console.log('Checkout details in showlineitems');
+      console.log('Checkout details in showlineitems', checkout);
       // console.log(checkout);
       var prodjson = "";
       for(let i = 0; i< checkout.lineItems.length;i++){
@@ -196,9 +232,9 @@ export class ViewcartPage {
           // console.log(this.cart);
           this.calculateAmount();
 
-          if(this.cart.length == 0){
+          /*if(this.cart.length == 0){
             this.storage.set('checkoutid'," ");
-          }
+          }*/
 
         });
       });

@@ -224,7 +224,7 @@ export class ViewproductsPage {
     + ',"qty":1'
     // + ',"lineitemsid":"' +  checkout.lineItems[checkout.lineItems.length-1].id
     +  '}';
-    // console.log('prod json = ' + prodjson);
+    // console.log('prod  json =' + prodjson);
     this.cartservice.addToCart(prodjson);
 
     // console.log('Added to cart in viewproducts...');
@@ -240,7 +240,6 @@ export class ViewproductsPage {
     .then((val) => {
       this.checkoutid = val;
       // console.log('Checkout id in addlineitems:' , this.checkoutid);
-
 
       if(this.checkoutid == undefined || this.checkoutid == " "){
 

@@ -60,6 +60,10 @@ export class HomePage {
         // appId: '6'
       });
 
+      this.storage.get("email").then((val : string) => {
+        this.loginuser = val;
+      });
+
       this.manageproducts.getproducts().then(products => {
         console.log('printing products in ionViewDidLoad method;')
         console.log(products);
@@ -113,6 +117,10 @@ export class HomePage {
       // this.storage.set('checkoutid', " ");
     });
     // this.cart = this.cartservice.getcart();
+
+    this.storage.get("email").then((val : string) => {
+      this.loginuser = val;
+    });
 
   }
 
@@ -220,6 +228,6 @@ export class HomePage {
 }
 
 showorders() {
-  this.navCtrl.push(OrdersPage);
+  this.navCtrl.setRoot(OrdersPage);
 }
 }
