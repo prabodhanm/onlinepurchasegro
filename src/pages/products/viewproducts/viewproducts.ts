@@ -8,6 +8,7 @@ import { Storage } from '@ionic/storage';
 import Client from 'shopify-buy';
 import { OrdersPage } from '../../orders/orders';
 import {EmptycartPage} from '../../cart/emptycart/emptycart';
+import {InvalidsearchPage} from '../../invalidsearch/invalidsearch';
 /**
  * Generated class for the ViewproductsPage page.
  *
@@ -23,7 +24,7 @@ import {EmptycartPage} from '../../cart/emptycart/emptycart';
 export class ViewproductsPage {
 
   cart = [];
-  products : any;
+  products : any = null;
   checkoutid : string;
   client : any;
   prodcheckout : any;
@@ -89,6 +90,10 @@ export class ViewproductsPage {
             this.products = collection.products;
             break;
           }
+        }
+
+        if(this.products == null) {
+          this.navCtrl.setRoot(InvalidsearchPage);
         }
       });
     })

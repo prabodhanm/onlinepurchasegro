@@ -53,6 +53,7 @@ import { CartserviceProvider } from '../providers/cartservice/cartservice';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import {RegisterPage} from '../pages/public/register/register';
 import {EmptycartPage} from '../pages/cart/emptycart/emptycart';
+import {InvalidsearchPage} from '../pages/invalidsearch/invalidsearch';
 // import {CheckoutPage} from '../pages/checkout/checkout';
 // import { File } from '@ionic-native/file';
 import {GlobalProvider} from '../providers/global/global';
@@ -70,7 +71,8 @@ import { HTTP } from '@ionic-native/http/ngx';
     ViewcartPage,
     DetailcartPage,
     RegisterPage,
-    EmptycartPage
+    EmptycartPage,
+    InvalidsearchPage
   ],
   imports: [
     BrowserModule,
@@ -89,7 +91,8 @@ import { HTTP } from '@ionic-native/http/ngx';
     ViewcartPage,
     DetailcartPage,
     RegisterPage,
-    EmptycartPage
+    EmptycartPage,
+    InvalidsearchPage
   ],
   providers: [
     StatusBar,
