@@ -21,6 +21,10 @@ page-viewcart {
    height: 100px;
   }
 
+  .scroll-content {
+    overflow-y: auto;
+  }
+
   ion-grid {
     width : 540px;
     height: !important;

@@ -66,7 +66,7 @@
     </ion-item>
       <ion-item no-lines ion-padding-top>
           <ion-slides *ngIf="this.imgcollection && this.imgcollection.length"
-          autoplay="5000" loop="true" speed="500" pager="true">
+          autoplay="5000" loop="true" speed="500" pager="true" effect="converflow">
             <ion-slide *ngFor= "let d of this.imgcollection">
               <img src='../../assets/img/slider/{{d}}' tappable>
                   <!-- <ion-img src={{d.images[0].src}} tappable> -->
@@ -80,11 +80,13 @@
                 <ion-col class="shopforheader">Shop For</ion-col>
               </ion-row>
               <ion-row>
-                <ion-col *ngFor= "let collection of this.collectiondata">
-                    <ion-thumbnail>
+                <ion-col col-4 *ngFor= "let collection of this.collectiondata">
+                    <img (click)="showproducts(collection)" src={{collection.src}} class="imgclass">
+                    <!-- <ion-thumbnail>
                         <img (click)="showproducts(collection)" src={{collection.src}} class="imgclass">
-                    </ion-thumbnail>
-
+                    </ion-thumbnail> -->
+                    <!-- <div class="image-container" [style.background-image]="'url(' + collection.src + ')'">
+                      </div> -->
                     <ion-label text-wrap>{{collection.title}}</ion-label>
                 </ion-col>
               </ion-row>
@@ -108,25 +110,45 @@
         </ion-item>
 
       </ion-content> -->
+<!-- <ion-list>
+  <ion-item *ngFor= "let collection of this.allcollectiondata">
+      <ion-label class="shopforheader">Featured Collection</ion-label>
+  </ion-item>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col size="6" *ngFor= "let prod of collection.products">
+        <img src={{prod.images[0].src}} class="imgclass" (click)="showdetailitems(prod)">
+        <ion-label>{{prod.title}}</ion-label>
+        <ion-label>{{prod.variants[0].price}}</ion-label>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-list> -->
+
 
       <ion-grid>
           <ion-row *ngFor= "let collection of this.allcollectiondata">
             <ion-item>
                 <ion-label class="shopforheader">Featured Collection</ion-label>
             </ion-item>
-
+            <!-- col-md-4 col-xl-3  -->
             <ion-col>
                 <ion-grid>
                   <ion-row>
-                    <ion-col *ngFor= "let prod of collection.products">
-                      <img src={{prod.images[0].src}} class="imgclass" (click)="showdetailitems(prod)">
+                    <ion-col col-6 *ngFor= "let prod of collection.products">
+                      <!-- <ion-thumbnail>
+                          <img src={{prod.images[0].src}} class="imgclass" (click)="showdetailitems(prod)">
+                      </ion-thumbnail> -->
+                      <img src={{prod.images[0].src}} class="image-container" (click)="showdetailitems(prod)">
+                      <!-- <div (click)="showdetailitems(prod)" class="image-container" [style.background-image]="'url(' + prod.images[0].src + ')'">
+                      </div> -->
                       <ion-label>{{prod.title}}</ion-label>
                       <ion-label>{{prod.variants[0].price}}</ion-label>
                     </ion-col>
                   </ion-row>
                 </ion-grid>
             </ion-col>
-
 
             </ion-row>
       </ion-grid>

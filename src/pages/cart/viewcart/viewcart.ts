@@ -208,17 +208,21 @@ export class ViewcartPage {
     /*this.cartservice.removeFromCart(prod);
     this.calculateAmount();*/
     //this.checkoutid = this.cartservice.getcheckoutid();
+    console.log('prod in removeitemfromcart ', prod);
     this.storage.get('checkoutid')
     .then((val) => {
       this.checkoutid = val;
-      // console.log('checkout id in removeitemfromcart ' + this.checkoutid);
+      console.log('checkout id in removeitemfromcart ' + this.checkoutid);
 
       //Removing item
       this.client.product.fetch(prod.id).then((product) => {
-        // console.log('lineitems id in removeitemfromcart = ' + prod.lineitemsid);
+        console.log('lineitems id in removeitemfromcart = ' + prod.lineitemsid);
+        console.log('prod id in removeitemfromcart ', prod.id);
         const lineItemIdsToRemove = [
           prod.lineitemsid
         ];
+
+        console.log('lineitemsid array in removeitemfromcart ', lineItemIdsToRemove);
 
         // console.log('lineitemsid in removeitemfromcart =' + prod.lineitemsid);
         this.client.checkout.removeLineItems(this.checkoutid, lineItemIdsToRemove).then((checkout) => {
@@ -230,12 +234,12 @@ export class ViewcartPage {
           this.storage.set('cart',this.cart);
           // console.log('cart items...');
           // console.log(this.cart);
-          this.calculateAmount();
+          // this.calculateAmount();
+          this.showlineitems();
 
-          /*if(this.cart.length == 0){
-            this.storage.set('checkoutid'," ");
-          }*/
-
+        })
+        .catch((error)=> {
+          console.log('Error occurred ', error);
         });
       });
     });
